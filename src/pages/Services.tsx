@@ -139,7 +139,7 @@ export default function Services() {
       </div>
 
       {/* Hero Section */}
-      <section className="service-section snap-section bg-surface relative pt-20 md:pt-32 pb-6 md:pb-20">
+      <section className="service-section snap-section bg-surface relative pt-12 md:pt-14 pb-6 md:pb-20">
         <div className="absolute inset-0 floral-pattern opacity-[0.03] pointer-events-none"></div>
         <div className="h-full flex flex-col justify-center px-6 md:px-24 max-w-7xl mx-auto w-full">
           <span className="font-label text-xs tracking-[0.3rem] uppercase text-secondary mb-4 md:mb-6 block">Our Expertise</span>
@@ -197,7 +197,7 @@ export default function Services() {
       })}
 
       {/* CTA Section */}
-      <section className="service-section snap-section bg-primary text-on-primary relative flex items-center justify-center text-center px-6 py-14 md:py-20">
+      <section className="service-section snap-section bg-primary text-on-primary relative flex items-center justify-center text-center px-6 py-8 md:py-12">
         <div className="absolute inset-0 mandala-overlay opacity-10 mix-blend-overlay"></div>
         <div className="relative z-10 max-w-3xl">
           <span className="material-symbols-outlined text-brand-gold text-5xl md:text-6xl mb-6 md:mb-8">auto_awesome</span>

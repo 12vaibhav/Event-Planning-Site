@@ -1,6 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useAuth } from '../contexts/AuthContext';
+import AuthModal from './AuthModal';
 
 const WhatsAppIcon = () => (
   <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -11,7 +13,9 @@ const WhatsAppIcon = () => (
 export default function Navbar() {
   const location = useLocation();
   const path = location.pathname;
+  const { user, signOut } = useAuth();
   const [scrolled, setScrolled] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -56,7 +60,7 @@ export default function Navbar() {
   const navPosition = 'fixed';
   const navBackground = scrolled 
     ? 'bg-surface/95 backdrop-blur-md shadow-sm border-b border-brand-gold/10' 
-    : (isHome ? 'glass-nav' : 'bg-transparent');
+    : 'glass-nav';
 
   return (
     <>
@@ -69,9 +73,26 @@ export default function Navbar() {
           <span className="material-symbols-outlined">menu</span>
         </button>
         <Link to="/" className="font-serif text-lg tracking-[0.3em] text-primary italic font-bold">HEIRLOOM</Link>
-        <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-primary hover:text-brand-gold transition-colors">
-          <WhatsAppIcon />
-        </a>
+        <div className="flex items-center gap-1">
+          {user ? (
+            <button 
+              onClick={() => setIsMenuOpen(true)}
+              className="w-10 h-10 flex items-center justify-center text-brand-gold transition-colors"
+            >
+              <span className="material-symbols-outlined text-xl">account_circle</span>
+            </button>
+          ) : (
+            <button 
+              onClick={() => setIsAuthModalOpen(true)}
+              className="w-10 h-10 flex items-center justify-center text-primary group-hover:text-brand-gold transition-colors"
+            >
+              <span className="material-symbols-outlined text-xl">login</span>
+            </button>
+          )}
+          <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center text-primary hover:text-brand-gold transition-colors">
+            <WhatsAppIcon />
+          </a>
+        </div>
       </header>
 
       {/* Mobile Side Navigation Drawer */}
@@ -144,9 +165,33 @@ export default function Navbar() {
                   );
                 })}
               </nav>
-              
               <div className="p-8 border-t border-brand-gold/10 bg-surface-container-low">
                 <p className="font-label text-[10px] uppercase tracking-widest text-secondary mb-4">Start your journey</p>
+                
+                {user ? (
+                  <button 
+                    onClick={() => {
+                      signOut();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full border border-brand-gold/30 text-primary py-4 rounded-xl flex items-center justify-center gap-2 font-label text-xs uppercase tracking-widest font-bold mb-4 hover:bg-brand-gold/5 transition-all"
+                  >
+                    <span className="material-symbols-outlined text-sm">logout</span>
+                    Sign Out
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => {
+                      setIsAuthModalOpen(true);
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full bg-surface-container-high text-primary py-4 rounded-xl flex items-center justify-center gap-2 font-label text-xs uppercase tracking-widest font-bold mb-4 hover:bg-brand-gold/10 transition-all border border-brand-gold/20"
+                  >
+                    <span className="material-symbols-outlined text-sm">login</span>
+                    Sign In
+                  </button>
+                )}
+
                 <a 
                   href="https://wa.me/919876543210" 
                   target="_blank" 
@@ -163,7 +208,7 @@ export default function Navbar() {
       </AnimatePresence>
 
       {/* Desktop Navbar */}
-      <nav className={`${navPosition} top-0 w-full z-50 transition-all duration-300 hidden lg:flex justify-between items-center px-6 md:px-10 py-6 max-w-full mx-auto ${navBackground}`}>
+      <nav className={`${navPosition} top-0 w-full z-50 transition-all duration-300 hidden lg:flex justify-between items-center px-6 md:px-10 py-4 max-w-full mx-auto ${navBackground}`}>
         <Link to="/" className="text-2xl font-headline italic text-primary hover:text-brand-gold transition-colors">The Heirloom Editorial</Link>
         <div className="hidden md:flex gap-10 items-center">
           <Link to="/services" className={getLinkClass('/services')}>Services</Link>
@@ -172,15 +217,44 @@ export default function Navbar() {
           <Link to="/about" className={getLinkClass('/about')}>About</Link>
           <Link to="/contact" className={getLinkClass('/contact')}>Contact</Link>
         </div>
-        <a 
-          href="https://wa.me/919876543210" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="group text-white bg-[#25D366] px-6 py-2 rounded-full flex items-center gap-2 hover:bg-[#25D366]/90 hover:shadow-lg transition-all duration-300 font-label text-xs uppercase tracking-widest"
-        >
-          <div className="p-1 rounded-full bg-white/20 group-hover:scale-110 transition-transform duration-300"><WhatsAppIcon /></div> WhatsApp
-        </a>
+        <div className="hidden md:flex gap-8 items-center">
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-secondary font-label text-[10px] uppercase tracking-widest">
+                {user.email?.split('@')[0]}
+              </span>
+              <button 
+                onClick={() => signOut()}
+                className="text-primary hover:text-brand-gold transition-colors font-label text-[10px] uppercase tracking-widest font-bold px-3 py-1 border border-brand-gold/20 rounded-full hover:bg-brand-gold/5"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => setIsAuthModalOpen(true)}
+              className="text-primary hover:text-brand-gold transition-colors font-label text-[10px] uppercase tracking-widest font-bold"
+            >
+              Sign In
+            </button>
+          )}
+          
+          <a 
+            href="https://wa.me/919876543210" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="group text-white bg-[#25D366] px-6 py-2 rounded-full flex items-center gap-2 hover:bg-[#25D366]/90 hover:shadow-lg transition-all duration-300 font-label text-xs uppercase tracking-widest"
+          >
+            <div className="p-1 rounded-full bg-white/20 group-hover:scale-110 transition-transform duration-300"><WhatsAppIcon /></div> WhatsApp
+          </a>
+        </div>
       </nav>
+
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+      />
     </>
   );
 }

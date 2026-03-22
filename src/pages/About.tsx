@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function About() {
   return (
     <>
-      <header className="relative w-full h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden bg-surface mt-16 md:mt-20">
+      <header className="relative w-full h-auto flex items-center justify-center overflow-hidden bg-surface mt-12 md:mt-14 pt-10 pb-4 md:pt-16 md:pb-10">
         <div className="absolute inset-0 opacity-[0.03] floral-pattern pointer-events-none"></div>
         <div className="relative z-10 text-center px-6 max-w-4xl">
           <span className="block font-label text-secondary text-[10px] md:text-xs tracking-[0.2rem] md:tracking-[0.3rem] uppercase mb-3 md:mb-4">Our Story</span>
@@ -11,7 +11,7 @@ export default function About() {
         </div>
       </header>
 
-      <section className="py-12 md:py-16 px-6 md:px-12 max-w-7xl mx-auto">
+      <section className="py-8 md:py-12 px-6 md:px-12 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
           <div className="relative rounded-2xl overflow-hidden editorial-shadow h-[400px] md:h-[600px]">
             <img alt="Founder arranging flowers" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTibaLA9PuziofVfpImdgHDnee6U_2J1banFUJua4_87MRkSS0_pMNEUzgHg6H-ppCnHOXeOJ-eKLf0v1U-DflLqd4MtfNTGtIRlIn0YdvCElPlmuN4G_Zkgm2IeBjTlPhpFZZJSPka0TsKjpwUE66Ckn6opiNpQ--4lzW1WQea9sMjyRAq8f1nVOD1AVWJ4pekASjRIdnkAhPvJLAEGt-M6UAY19LVdYlj3fy5A3HpOHhdXk5bvERiDDjwsnNbY2_AECu0fggn3n8"/>

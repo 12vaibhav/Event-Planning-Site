@@ -1,8 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
 import PortfolioSection from '../components/PortfolioSection';
+import AuthModal from '../components/AuthModal';
+import { useAuth } from '../contexts/AuthContext';
+import { useVirtualPreview } from '../hooks/useVirtualPreview';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
@@ -10,18 +13,70 @@ import SplitType from 'split-type';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
-  const [previewState, setPreviewState] = useState<'idle' | 'uploading' | 'processing' | 'done'>('idle');
+  const { user } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState('Mehndi Vibes');
   const themes = ['Mehndi Vibes', 'Sangeet Glow', 'Grand Wedding', 'Bride-Groom Entry', 'Birthday Fun', 'Custom'];
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    previewState,
+    selectedFile,
+    filePreviewUrl,
+    generatedImageUrl,
+    error: previewError,
+    remainingToday,
+    processingTime,
+    handleFileSelect,
+    handleDrop,
+    handleDragOver,
+    generateVirtualPreview,
+    reset,
+    checkDailyLimit,
+  } = useVirtualPreview();
+
+  // Check daily limit on mount if user is authenticated
+  useEffect(() => {
+    if (user) {
+      checkDailyLimit();
+    }
+  }, [user, checkDailyLimit]);
 
   const handleUploadClick = () => {
-    setPreviewState('uploading');
-    setTimeout(() => {
-      setPreviewState('processing');
-      setTimeout(() => {
-        setPreviewState('done');
-      }, 2000);
-    }, 1000);
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileSelect(file);
+    }
+    // Reset input so same file can be re-selected
+    e.target.value = '';
+  };
+
+  const handleGenerateClick = async () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    if (!selectedFile) {
+      handleUploadClick();
+      return;
+    }
+    await generateVirtualPreview(selectedTheme);
+  };
+
+  const handleDropZone = (e: React.DragEvent<HTMLDivElement>) => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    handleDrop(e);
   };
 
   useEffect(() => {
@@ -68,7 +123,7 @@ export default function Home() {
 
   return (
     <>
-      <header className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-background">
+      <header className="relative h-[100dvh] w-full flex items-start lg:items-center justify-center overflow-hidden bg-background pt-24 lg:pt-0">
         {/* Background Layer (Animated) */}
         <motion.div 
           initial={{ scale: 1.15, opacity: 0 }}
@@ -77,13 +132,17 @@ export default function Home() {
           className="absolute inset-0 z-0 will-change-transform"
         >
           <img 
-            alt="Elegant wedding decorations with floral arrangements and warm lighting" 
-            className="w-full h-full object-cover" 
-            src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1920&auto=format&fit=crop"
-            referrerPolicy="no-referrer"
+            alt="Elegant wedding decorations" 
+            className="w-full h-full object-cover hidden lg:block" 
+            src="/Image Assets/hero_desktop_v2.png"
+          />
+          <img 
+            alt="Mobile hero background" 
+            className="w-full h-full object-cover lg:hidden blur-[2px]" 
+            src="/Image Assets/hero_mobile_v3.jpg"
           />
           <div className="hero-grain"></div>
-          <div className="absolute inset-0 hero-gradient-overlay opacity-50"></div>
+          <div className="absolute inset-0 hero-gradient-overlay opacity-20"></div>
           {/* Dark overlay for text visibility across all devices */}
           <div className="absolute inset-0 bg-black/0 z-10"></div>
         </motion.div>
@@ -122,7 +181,7 @@ export default function Home() {
         </div>
 
         {/* Main Content Container */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-10 lg:pt-20">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-6 lg:pt-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
             
             {/* Left Column: Headline */}
@@ -141,32 +200,32 @@ export default function Home() {
                 >
                   <motion.div 
                     variants={{ hidden: { opacity: 0, x: -30 }, visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: "easeOut" } } }}
-                    className="flex items-center justify-center md:justify-start gap-3 lg:gap-4 mb-2 lg:mb-4"
+                    className="flex lg:hidden items-center justify-center md:justify-start gap-3 lg:gap-4 mb-2 lg:mb-4"
                   >
-                    <div className="w-8 lg:w-12 h-[1px] bg-brand-gold/40" />
-                    <span className="font-serif text-xs lg:text-base italic tracking-[0.2em] text-brand-gold/80">
+                    <div className="w-8 lg:w-12 h-[1px] bg-white/40" />
+                    <span className="font-serif text-xs lg:text-base font-bold italic tracking-[0.2em] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                       Premium Event Design
                     </span>
                   </motion.div>
 
-                  <h1 className="font-serif italic text-brand-gold leading-[0.6] md:leading-[0.8] tracking-tight font-extrabold md:font-bold text-center md:text-left drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]">
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-4xl md:text-6xl lg:text-7xl text-white drop-shadow-[0_4px_15px_rgba(0,0,0,0.8)] mb-0 md:mb-1">
+                  <h1 className="font-serif italic text-brand-gold leading-[0.6] md:leading-[0.65] tracking-tight font-extrabold md:font-bold text-center md:text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-4xl md:text-6xl lg:text-7xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)] mb-0 md:mb-0">
                       Apne Sapno Ki
                     </motion.div>
                     
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-6xl md:text-9xl lg:text-10xl md:pl-24 drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] mb-0 md:mb-2 font-black md:font-extrabold [text-shadow:_0_0_1px_white]">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-6xl md:text-9xl lg:text-10xl md:pl-24 drop-shadow-[0_2px_8px_rgba(255,255,255,0.4)] md:drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] mb-0 md:mb-0 font-black md:font-extrabold [-webkit-text-stroke:0.5px_rgba(255,255,255,0.6)] lg:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.5)] text-brand-maroon">
                       Shaadi
                     </motion.div>
 
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-4xl md:text-6xl lg:text-7xl text-white md:pl-12 drop-shadow-[0_4px_15px_rgba(0,0,0,0.8)] mb-0 md:mb-1">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-4xl md:text-6xl lg:text-7xl text-white md:pl-12 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)] mb-0 md:mb-0">
                       Ko Humari
                     </motion.div>
 
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-6xl md:text-9xl lg:text-10xl md:pl-48 drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] mb-0 md:mb-2 font-black md:font-extrabold [text-shadow:_0_0_1px_white]">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-6xl md:text-9xl lg:text-10xl md:pl-48 drop-shadow-[0_2px_8px_rgba(255,255,255,0.4)] md:drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] mb-0 md:mb-0 font-black md:font-extrabold [-webkit-text-stroke:0.5px_rgba(255,255,255,0.6)] lg:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.5)] text-brand-maroon">
                       Mehndi
                     </motion.div>
 
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-4xl md:text-6xl lg:text-7xl text-white md:pl-20 drop-shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-4xl md:text-6xl lg:text-7xl text-white md:pl-20 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
                       Se Shuru Karte Hain
                     </motion.div>
                   </h1>
@@ -182,17 +241,27 @@ export default function Home() {
                 className="space-y-6 lg:space-y-8 will-change-transform"
               >
                 <div className="space-y-3 lg:space-y-4">
-                  <p className="text-white font-serif italic text-sm lg:text-base leading-relaxed border-l-2 border-brand-gold pl-4 lg:pl-6">
+                  <p className="text-white font-serif font-bold italic text-sm lg:text-base leading-relaxed border-l-2 border-brand-gold pl-4 lg:pl-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                     Crafting cinematic celebrations that honor tradition through modern editorial artistry.
                   </p>
                   <div className="flex flex-wrap gap-2 pt-1 lg:pt-2">
                     {['Wedding', 'Mehndi', 'Sangeet'].map((tag) => (
-                      <span key={tag} className="px-3 py-1 lg:px-4 lg:py-1.5 rounded-full border border-white/20 text-[8px] lg:text-[9px] uppercase tracking-[0.2em] text-white font-medium">
+                      <span key={tag} className="px-3 py-1 lg:px-4 lg:py-1.5 rounded-full border border-white/20 text-[8px] lg:text-[9px] uppercase tracking-[0.2em] text-white font-bold">
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
+
+                <motion.div 
+                  variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0, transition: { duration: 1.2, delay: 2.1, ease: "easeOut" } } }}
+                  className="hidden lg:flex items-center gap-4 mb-4"
+                >
+                  <div className="w-12 h-[1px] bg-white/40" />
+                  <span className="font-serif text-base italic tracking-[0.2em] text-white">
+                    Premium Event Design
+                  </span>
+                </motion.div>
 
                 <div className="flex flex-col gap-3 lg:gap-4">
                   <Link to="/contact" className="bg-brand-maroon text-white px-6 py-3 lg:px-8 lg:py-4 rounded-full shadow-2xl hover:scale-105 transition-transform font-bold tracking-widest uppercase text-[10px] lg:text-[11px] flex items-center justify-center gap-2 lg:gap-3 group border border-white/10">
@@ -241,7 +310,7 @@ export default function Home() {
         </motion.div>
       </header>
       
-      <section className="py-8 lg:py-24 px-4 lg:px-20 bg-surface relative overflow-hidden">
+      <section className="py-4 lg:py-12 px-4 lg:px-20 bg-surface relative overflow-hidden">
         {/* Decorative background elements for the transition */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-24 lg:h-32 bg-gradient-to-b from-brand-gold to-transparent opacity-30" />
         
@@ -376,7 +445,7 @@ export default function Home() {
         whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative py-8 lg:py-32 w-full overflow-hidden"
+        className="relative py-6 lg:py-12 w-full overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-[#fdfbf0] via-[#fefccf] to-[#f5efd5] z-0"></div>
         <div className="absolute inset-0 mandala-overlay opacity-[0.05] z-0"></div>
@@ -404,46 +473,106 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full max-w-6xl">
               <div className="space-y-4 lg:space-y-6">
+                {/* Hidden file input */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
                 <div 
-                  onClick={previewState === 'idle' ? handleUploadClick : undefined}
-                  className={`aspect-square w-full bg-white/50 border-2 border-dashed border-brand-gold rounded-3xl flex flex-col items-center justify-center p-6 lg:p-10 transition-all group backdrop-blur-sm ${previewState === 'idle' ? 'cursor-pointer hover:bg-white/80' : 'opacity-80'}`}
+                  onClick={(!selectedFile && previewState !== 'processing') ? handleUploadClick : undefined}
+                  onDragOver={handleDragOver}
+                  onDrop={handleDropZone}
+                  className={`aspect-[5/4] w-full bg-white/50 border-2 border-dashed border-brand-gold rounded-3xl flex flex-col items-center justify-center p-6 lg:p-10 transition-all group backdrop-blur-sm ${(!selectedFile && previewState !== 'processing') ? 'cursor-pointer hover:bg-white/80' : 'opacity-90'}`}
                 >
-                  {previewState === 'idle' && (
+                  {!selectedFile && previewState !== 'processing' && previewState !== 'done' && (
                     <>
                       <span className="material-symbols-outlined text-4xl lg:text-6xl text-brand-maroon mb-3 lg:mb-4 group-hover:scale-110 transition-transform">add_a_photo</span>
                       <p className="font-headline text-base lg:text-xl text-primary mb-1 lg:mb-2">Drag & Drop Venue Photo</p>
-                      <p className="text-on-surface-variant/60 font-label text-[8px] lg:text-[10px] uppercase tracking-widest">Or Click to Upload</p>
+                      <p className="text-on-surface-variant/60 font-label text-[8px] lg:text-[10px] uppercase tracking-widest text-center mb-4">Or Click to Upload • JPG, PNG, WebP (Max 10MB)</p>
+                      
+                      {!user && (
+                        <div className="flex flex-col items-center gap-3">
+                          <p className="text-brand-maroon/80 font-headline text-xs lg:text-sm text-center bg-brand-gold/10 px-4 py-2 rounded-lg border border-brand-gold/20">
+                            Sign in required for real-time AI magic ✨
+                          </p>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowAuthModal(true);
+                            }}
+                            className="bg-brand-maroon text-white font-label text-[10px] uppercase tracking-widest font-bold px-6 py-2.5 rounded-full hover:bg-brand-gold transition-colors shadow-sm active:scale-95"
+                          >
+                            Sign In / Sign Up
+                          </button>
+                        </div>
+                      )}
                     </>
                   )}
                   {previewState === 'uploading' && (
                     <div className="flex flex-col items-center animate-pulse">
                       <span className="material-symbols-outlined text-4xl lg:text-6xl text-brand-maroon mb-3 lg:mb-4 animate-bounce">cloud_upload</span>
-                      <p className="font-headline text-base lg:text-xl text-primary">Uploading your venue...</p>
+                      <p className="font-headline text-base lg:text-xl text-primary">Processing your venue photo...</p>
                     </div>
                   )}
-                  {(previewState === 'processing' || previewState === 'done') && (
+                  {selectedFile && filePreviewUrl && previewState !== 'uploading' && (
                     <div className="w-full h-full relative rounded-2xl overflow-hidden">
-                      <img alt="Uploaded Venue" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAYrJ90PT4heTbf2vaOoB0Q4h72Ag59uxW1Z9RxtxebL48DXEF0_EFTwUp1xIrLrhoVFKu0aBGarXf09I7JaBKzXFINvgaGN_vBaj1rgSB-PCySWCPCDnN0lNOfD_-lJW4yAgFvHon8k1foraz2Szg-fHbGutKi1vg-AcbrD7KJFGmadBHo64MCcwfMT0YhMKHgkirzzWAS4JPte3Rv6-I3YoWWdpwRlIEA_OeQPCaj9I263CXnJjxewrMpZvTj8lXRqvqsukOXlSE" />
+                      <img alt="Uploaded Venue" className="w-full h-full object-cover" src={filePreviewUrl} />
                       <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                        <span className="bg-white/90 text-primary font-label text-[10px] lg:text-xs px-3 py-1 rounded-full uppercase tracking-widest">Uploaded</span>
+                        <span className="bg-white/90 text-primary font-label text-[10px] lg:text-xs px-3 py-1 rounded-full uppercase tracking-widest">Uploaded ✓</span>
                       </div>
+                      <button onClick={(e) => { e.stopPropagation(); reset(); }} className="absolute top-2 right-2 bg-white/90 rounded-full p-1 hover:bg-white transition-colors shadow-md">
+                        <span className="material-symbols-outlined text-sm text-brand-maroon">close</span>
+                      </button>
                     </div>
                   )}
                 </div>
+                {/* Error display */}
+                {previewError && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-sm">error</span>
+                    {previewError}
+                  </div>
+                )}
+                {/* Rate limit counter */}
+                {user && (
+                  <div className="text-center">
+                    <p className="text-on-surface-variant/60 font-label text-[9px] lg:text-[10px] uppercase tracking-widest">
+                      {remainingToday}/5 free previews remaining today
+                    </p>
+                  </div>
+                )}
                 <button 
-                  onClick={previewState === 'idle' ? handleUploadClick : undefined}
-                  disabled={previewState !== 'idle'}
-                  className={`w-full py-4 lg:py-5 rounded-xl text-base lg:text-lg font-bold shadow-xl transition-all flex items-center justify-center gap-2 lg:gap-3 ${previewState === 'idle' ? 'bg-brand-maroon text-on-primary hover:scale-[1.02] hover-gold-glow' : 'bg-surface-container-high text-on-surface/50 cursor-not-allowed'}`}
+                  onClick={handleGenerateClick}
+                  disabled={previewState === 'processing' || (previewState === 'done' && !selectedFile)}
+                  className={`w-full py-4 lg:py-5 rounded-xl text-base lg:text-lg font-bold shadow-xl transition-all flex items-center justify-center gap-2 lg:gap-3 ${previewState === 'processing' || previewState === 'done' ? 'bg-surface-container-high text-on-surface/50 cursor-not-allowed' : 'bg-brand-maroon text-on-primary hover:scale-[1.02] hover-gold-glow'}`}
                 >
                   {previewState === 'processing' ? (
                     <>
                       <span className="material-symbols-outlined animate-spin text-sm lg:text-base">sync</span>
-                      Applying {selectedTheme}...
+                      AI is decorating with {selectedTheme}...
                     </>
                   ) : previewState === 'done' ? (
                     <>
                       <span className="material-symbols-outlined text-sm lg:text-base">check_circle</span>
-                      Preview Generated!
+                      Preview Generated! {processingTime ? `(${(processingTime / 1000).toFixed(1)}s)` : ''}
+                    </>
+                  ) : previewState === 'error' ? (
+                    <>
+                      <span className="material-symbols-outlined text-sm lg:text-base">refresh</span>
+                      Try Again
+                    </>
+                  ) : !user ? (
+                    <>
+                      <span className="material-symbols-outlined text-sm lg:text-base">lock</span>
+                      Sign In & Generate Preview
+                    </>
+                  ) : !selectedFile ? (
+                    <>
+                      <span className="material-symbols-outlined text-sm lg:text-base">add_a_photo</span>
+                      Upload Venue Photo First
                     </>
                   ) : (
                     <>
@@ -452,6 +581,15 @@ export default function Home() {
                     </>
                   )}
                 </button>
+                {previewState === 'done' && (
+                  <button
+                    onClick={reset}
+                    className="w-full py-3 rounded-xl text-sm font-bold border border-brand-maroon/20 text-brand-maroon hover:bg-brand-maroon/5 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <span className="material-symbols-outlined text-sm">restart_alt</span>
+                    Generate New Preview
+                  </button>
+                )}
                 <div className="pt-4 lg:pt-6 border-t border-brand-gold/20">
                   <p className="text-on-surface-variant font-medium mb-4 lg:mb-6 text-xs lg:text-sm flex items-center gap-2">
                     <span className="material-symbols-outlined text-brand-gold text-sm lg:text-base">verified_user</span>
@@ -481,12 +619,12 @@ export default function Home() {
               </div>
               <div className="relative">
                 <div className="bg-primary/5 p-3 lg:p-4 rounded-[2rem] lg:rounded-[2.5rem] border-4 lg:border-8 border-brand-maroon/10 shadow-2xl relative overflow-hidden backdrop-blur-md">
-                  <div className="aspect-[4/5] bg-surface-container flex flex-col items-center justify-center text-center p-6 lg:p-8 border border-brand-gold/10 rounded-[1.5rem] lg:rounded-[2rem] relative overflow-hidden">
+                  <div className="aspect-[5/6] bg-surface-container flex flex-col items-center justify-center text-center p-6 lg:p-8 border border-brand-gold/10 rounded-[1.5rem] lg:rounded-[2rem] relative overflow-hidden">
                     <div className="absolute inset-0 opacity-[0.03] floral-pattern"></div>
                     
-                    {previewState === 'done' ? (
+                    {previewState === 'done' && generatedImageUrl ? (
                       <div className="absolute inset-0 w-full h-full animate-preview">
-                        <img alt="Transformed Venue" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1iYT4SADUsuthOQLdtP7srXogR3bBANNFZUZz_kMBmlRC8kQhQeJQ0gXMo41e8GQAc0zzwXA6snNHmdlqEHFbX98Dso3nmivfUswdTPr4QEg50ljHBr4l-YkJMbx2h_Z1YnpS1DJsdnZ8onWfshKqxjK0bMi-J77Yix_iFSVLmk-Bv8qdLU-WZc5v1FCI_PvnvvQzxaoswP6cecEPOQCdluRszezAvEKf68Ib2EI4KCsCV3wIRkQr0tR-EM2TjO_ABDZ4w8j27BUl" />
+                        <img alt="AI Decorated Venue" className="w-full h-full object-cover" src={generatedImageUrl} />
                         <div className="absolute bottom-4 lg:bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-4 lg:px-6 py-2 lg:py-3 rounded-full shadow-xl flex items-center gap-2 lg:gap-3">
                           <span className="material-symbols-outlined text-brand-gold text-xs lg:text-base">auto_awesome</span>
                           <span className="font-headline text-primary text-[10px] lg:text-sm">{selectedTheme} Applied</span>
@@ -537,7 +675,7 @@ export default function Home() {
         whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="pt-0 pb-4 lg:py-24 px-4 lg:px-20 bg-surface"
+        className="pt-0 pb-4 lg:py-6 px-4 lg:px-20 bg-surface"
       >
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <div className="text-center group">
@@ -568,7 +706,7 @@ export default function Home() {
         whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="py-6 lg:py-24 bg-surface-container-high relative overflow-hidden"
+        className="py-4 lg:py-10 bg-surface-container-high relative overflow-hidden"
       >
         <div className="absolute top-0 right-0 p-10 lg:p-20 opacity-10">
           <span className="material-symbols-outlined text-7xl lg:text-9xl text-brand-maroon">format_quote</span>
@@ -587,7 +725,7 @@ export default function Home() {
         whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="py-6 lg:py-32 px-4 lg:px-20 bg-surface relative overflow-hidden"
+        className="py-4 lg:py-12 px-4 lg:px-20 bg-surface relative overflow-hidden"
       >
         <div className="absolute -left-20 top-20 w-64 h-80 rotate-12 opacity-40 hidden lg:block">
           <img alt="Decorative floral detail" className="w-full h-full object-cover rounded-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFvg53eVoiJvUDX9lwrsO8SYo8cWx9H4lpUYADd-UN5b6IJn7ERs9maVkKbeEf4GEjXqYs2GNJhMwLOwnmEibRnWxYWaa2SI2C9roAu3QAaYlHqc6xfcd1eYA2DqHOF_6-iWDGKPokblOkqUZ1tDLCXeH_ZjsFQV3kdnrlMbCrU5Dvvs53BvmLYr4sYB-m-JFiZz7AuJJElhjNBNlKzVAxdVJwCYnIeYTNfPtNmFqCdPkOZY70Sn8YogiMgjhVBXZHZY-dI0DkJDXA"/>
@@ -610,6 +748,13 @@ export default function Home() {
           </div>
         </div>
       </motion.section>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        redirectMessage="Sign in to generate your free virtual decoration preview!"
+      />
     </>
   );
 }

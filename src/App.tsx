@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BottomNav from './components/BottomNav';
@@ -16,32 +17,34 @@ function Layout({ children }: { children: ReactNode }) {
   const isServices = location.pathname === '/services';
 
   return (
-    <div className={`min-h-[100dvh] flex flex-col bg-surface text-on-surface font-body antialiased selection:bg-primary/20 ${isServices ? 'md:h-[100dvh] md:overflow-hidden' : ''}`}>
+    <div className={`min-h-[100dvh] flex flex-col bg-surface overflow-x-hidden text-on-surface font-body antialiased selection:bg-primary/20 ${isServices ? 'md:h-[100dvh] md:overflow-hidden' : ''}`}>
       <ScrollToTop />
       <Navbar />
-      <main id="main-scroll-container" className={`flex-grow ${isServices ? 'snap-container md:overscroll-none' : ''}`}>
+      <main id="main-scroll-container" className={`flex-grow pb-24 lg:pb-0 ${isServices ? 'snap-container md:overscroll-none' : ''}`}>
         {children}
         {isServices && <div className="snap-start"><Footer /></div>}
       </main>
       {!isServices && <Footer />}
-      {!isServices && <BottomNav />}
+      <BottomNav />
     </div>
   );
 }
 
 export default function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/packages" element={<Packages />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/packages" element={<Packages />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </AuthProvider>
   );
 }

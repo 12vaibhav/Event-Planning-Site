@@ -26,32 +26,29 @@ export default function PortfolioSection() {
     const mm = gsap.matchMedia();
 
     mm.add("(min-width: 640px)", () => {
-      // 1. Entrance Animation
+      // 1. Entrance Animation – alternating left/right fly-in
       gsap.fromTo(".image-gallery-wrapper", 
         {
           opacity: 0,
-          x: (i) => {
-            if (i % 3 === 0) return -150; // From left
-            if (i % 3 === 2) return 150;  // From right
-            return 0;
-          },
-          y: (i) => {
-            if (i % 3 === 1) return -150; // From top
-            return 0;
-          }
+          x: (i) => i % 2 === 0 ? -300 : 300,
+          y: 40,
+          scale: 0.85,
+          rotation: (i) => i % 2 === 0 ? -8 : 8
         },
         {
           scrollTrigger: {
             trigger: triggerRef.current,
-            start: "top 80%",
+            start: "top 85%",
             toggleActions: "play none none none"
           },
           opacity: 1,
           x: 0,
           y: 0,
-          duration: 1.2,
-          stagger: 0.1,
-          ease: "power3.out",
+          scale: 1,
+          rotation: 0,
+          duration: 1.4,
+          stagger: 0.12,
+          ease: "power4.out",
           force3D: true
         }
       );
@@ -85,7 +82,7 @@ export default function PortfolioSection() {
   }, []);
 
   return (
-    <section className="image-gallery-section pt-2 pb-1 sm:pt-24 sm:pb-12 bg-surface">
+    <section className="image-gallery-section pt-2 pb-1 sm:pt-12 sm:pb-6 bg-surface">
       <div className="max-w-7xl mx-auto px-6">
         <div className="big-heading-block image-gallery-heading mb-8 sm:mb-16">
           <h2 className="big-heading text-reveal-animation font-headline text-5xl text-primary text-center">
@@ -96,9 +93,9 @@ export default function PortfolioSection() {
           </p>
         </div>
         
-        <div id="photo-gallery-trigger" ref={triggerRef} className="relative pt-8 sm:pt-32 pb-16">
+        <div id="photo-gallery-trigger" ref={triggerRef} className="relative pt-4 sm:pt-12 pb-8">
           {/* Desktop Absolute/GSAP Layout */}
-          <div className="hidden sm:block image-gallery-inner w-full max-w-[1400px] h-[70vh] relative mx-auto">
+          <div className="hidden sm:block image-gallery-inner w-full max-w-[1400px] h-[600px] relative mx-auto sm:-mt-12">
             {portfolioItems.map((item) => (
               <div key={item.class} className={`image-gallery-wrapper ${item.class} absolute will-change-transform`}>
                 <a href="#" className="image-gallery-block w-full h-full block overflow-hidden rounded-xl shadow-xl group will-change-transform">

@@ -123,11 +123,11 @@ export default function Portfolio() {
 
   return (
     <>
-      <header className="relative w-full h-[50vh] md:h-[716px] flex items-center justify-center overflow-hidden bg-primary-container mt-16 md:mt-20">
+      <header className="relative w-full h-[35vh] md:h-auto flex items-center justify-center overflow-hidden bg-primary-container mt-12 md:mt-14 md:py-20">
         <div className="absolute inset-0 opacity-40 mix-blend-overlay">
           <img alt="Grand Indian wedding decor with gold and maroon accents" className="w-full h-full object-cover scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATT-U1DS7ziCqjWnDObdomSkYD-DLKO-5hH58wWkax8lOFEvskqIh4iOFQCh1LgYAjlZMQRAuPq_WidD4oj4rttM8oJ_ceqCcsB3XotAuL2gFSo2NouxcKX_rQQDKXKc20lVQEQbjP_4gJicqvfdNmDMl_vFHX30qZPtrE9Jk2W7omvJjSX1sS2SpISQj-S7eUdJHcXjzeUerjci3hFb9G3QVT6Nnn8otDVqzQfqWsTUYX68B-bse0rdYO6PEQPav_5CEnnUxMmpCJ"/>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-transparent to-surface"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/40 via-transparent to-surface/30"></div>
         <div className="relative z-10 text-center px-6 max-w-4xl">
           <span className="block font-label text-white/80 text-[10px] md:text-xs tracking-[0.2rem] md:tracking-[0.3rem] uppercase mb-3 md:mb-4">A Legacy of Celebration</span>
           <h1 className="font-headline text-4xl md:text-8xl text-white mb-4 md:mb-6 leading-tight tracking-tighter">Our Magical Creations</h1>
@@ -157,8 +157,16 @@ export default function Portfolio() {
           {portfolioItems.slice(0, visibleCount).map((item, index) => (
             <motion.div 
               key={item.id} 
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ 
+                opacity: 0, 
+                x: index % 2 === 0 ? -30 : 30,
+                rotate: index % 2 === 0 ? -2 : 2 
+              }}
+              whileInView={{ 
+                opacity: 1, 
+                x: 0,
+                rotate: 0
+              }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8, ease: "easeOut" }}
               ref={index === visibleCount - 6 ? loadMoreRef : null}
@@ -188,7 +196,7 @@ export default function Portfolio() {
         )}
       </main>
 
-      <section className="py-16 md:py-24 bg-surface-container-low overflow-hidden relative">
+      <section className="py-8 md:py-12 bg-surface-container-low overflow-hidden relative">
         <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 text-secondary/10 pointer-events-none">
           <span className="material-symbols-outlined text-[10rem] md:text-[20rem]">filter_vintage</span>
         </div>
