@@ -181,7 +181,7 @@ export default function Home() {
         </div>
 
         {/* Main Content Container */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-6 pb-40 lg:pb-20 lg:pt-20">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-6 pb-16 lg:pb-20 lg:pt-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
             
             {/* Left Column: Headline */}
