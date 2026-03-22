@@ -59,7 +59,7 @@ export default function Navbar() {
   const isHome = path === '/';
   const navPosition = 'fixed';
   const navBackground = scrolled 
-    ? 'bg-surface/95 backdrop-blur-md shadow-sm border-b border-brand-gold/10' 
+    ? 'bg-surface/95 lg:bg-surface backdrop-blur-md shadow-sm border-b border-brand-gold/10' 
     : 'glass-nav';
 
   return (
