@@ -299,7 +299,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.5 }}
-          className="absolute bottom-12 right-12 z-20 flex items-center gap-6 cursor-pointer group"
+          className="absolute bottom-12 right-12 z-20 hidden lg:flex items-center gap-6 cursor-pointer group"
           onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
         >
           <span className="font-label text-[10px] uppercase tracking-[0.4em] text-white/60 group-hover:text-white transition-colors">
