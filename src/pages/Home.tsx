@@ -213,7 +213,7 @@ export default function Home() {
                       Apne Sapno Ki
                     </motion.div>
                     
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-5xl md:text-9xl lg:text-10xl md:pl-24 drop-shadow-[0_1px_4px_rgba(255,255,255,0.3)] md:drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] mb-0 md:mb-0 font-black md:font-extrabold md:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.6)] lg:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.5)] text-brand-maroon">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-5xl md:text-9xl lg:text-10xl md:pl-24 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] md:drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] mb-0 md:mb-0 font-black md:font-extrabold md:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.6)] lg:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.5)] text-brand-maroon">
                       Shaadi
                     </motion.div>
 
@@ -221,7 +221,7 @@ export default function Home() {
                       Ko Humari
                     </motion.div>
 
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-5xl md:text-9xl lg:text-10xl md:pl-48 drop-shadow-[0_1px_4px_rgba(255,255,255,0.3)] md:drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] mb-0 md:mb-0 font-black md:font-extrabold md:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.6)] lg:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.5)] text-brand-maroon">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-5xl md:text-9xl lg:text-10xl md:pl-48 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)] md:drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] mb-0 md:mb-0 font-black md:font-extrabold md:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.6)] lg:[-webkit-text-stroke:0.5px_rgba(255,255,255,0.5)] text-brand-maroon">
                       Mehndi
                     </motion.div>
 
