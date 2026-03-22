@@ -143,16 +143,20 @@ export default function Home() {
           transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0 z-0 will-change-transform"
         >
-          <picture>
-            <source media="(min-width: 1024px)" srcSet="/Image Assets/hero_desktop_v2.png" />
-            <img 
-              alt="Elegant wedding decorations" 
-              className="hero-image" 
-              src="/Image Assets/hero_mobile_v3.jpg"
-              width="800"
-              height="1200"
-            />
-          </picture>
+          <img 
+            alt="Elegant wedding decorations" 
+            className="w-full h-full object-cover hidden lg:block" 
+            src="/Image Assets/hero_desktop_v2.png"
+            width="1920"
+            height="1080"
+          />
+          <img 
+            alt="Mobile hero background" 
+            className="hero-image lg:hidden" 
+            src="/Image Assets/hero_mobile_v3.jpg"
+            width="800"
+            height="1200"
+          />
           <div className="hero-grain"></div>
           <div className="absolute inset-0 hero-gradient-overlay opacity-20"></div>
           {/* Dark overlay for text visibility across all devices */}
