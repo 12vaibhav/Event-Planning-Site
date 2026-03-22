@@ -221,7 +221,12 @@
   background: linear-gradient(to bottom, transparent, rgba(87, 0, 0, 0.2));
   backdrop-filter: blur(8px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1.25rem 0;
+  padding: 0.6rem 0;
+}
+@media (min-width: 1024px) {
+  .marquee-container {
+    padding: 1.25rem 0;
+  }
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
