@@ -54,7 +54,7 @@ export default function Packages() {
 
   return (
     <>
-      <header className="relative w-full h-[40vh] md:h-[60vh] flex items-center justify-center overflow-hidden bg-primary-container mt-12 md:mt-14">
+      <header className="relative w-full h-[40vh] md:h-[60vh] flex items-center justify-center overflow-hidden bg-primary-container mt-12 md:mt-20">
         <div className="absolute inset-0 opacity-30 mix-blend-overlay">
           <img alt="Elegant table setting with floral centerpieces" className="w-full h-full object-cover scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-DlK5Whm3TH37zyGxvXHItg0yEUrYAtOreZzpVbgVKGus3IF3HeQXU9PK4Aa2vFmcGid4W5O3B9tX6Q8hrpzkPIjvg_vMfxDksJtFj1A7TWWG2SpHTrOhvjLuyIyJFyIgW44vJhBb4tsEN3IjspoGQlaif9GPYLisqQhIiYS6HZU7rVw923VIx3qosJZB4SmfKLAphRZq3u4cHyO4qEJ2FlpYm2dHNqOEn5RkWY3s3ydEGR4iMOyMe4cHXJo2H3RV664bcakOeIkW"/>
         </div>

@@ -123,7 +123,7 @@ export default function Portfolio() {
 
   return (
     <>
-      <header className="relative w-full h-[35vh] md:h-auto flex items-center justify-center overflow-hidden bg-primary-container mt-12 md:mt-14 md:py-20">
+      <header className="relative w-full h-[35vh] md:h-auto flex items-center justify-center overflow-hidden bg-primary-container mt-12 md:mt-20 md:py-20">
         <div className="absolute inset-0 opacity-40 mix-blend-overlay">
           <img alt="Grand Indian wedding decor with gold and maroon accents" className="w-full h-full object-cover scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATT-U1DS7ziCqjWnDObdomSkYD-DLKO-5hH58wWkax8lOFEvskqIh4iOFQCh1LgYAjlZMQRAuPq_WidD4oj4rttM8oJ_ceqCcsB3XotAuL2gFSo2NouxcKX_rQQDKXKc20lVQEQbjP_4gJicqvfdNmDMl_vFHX30qZPtrE9Jk2W7omvJjSX1sS2SpISQj-S7eUdJHcXjzeUerjci3hFb9G3QVT6Nnn8otDVqzQfqWsTUYX68B-bse0rdYO6PEQPav_5CEnnUxMmpCJ"/>
         </div>
