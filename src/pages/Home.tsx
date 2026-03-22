@@ -427,6 +427,8 @@ export default function Home() {
                   alt={service.title} 
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
                   src={service.img}
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-maroon/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center pb-3 lg:pb-6">
                   <span className="text-white font-label text-[8px] lg:text-[10px] uppercase tracking-widest border border-white/40 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full backdrop-blur-sm">
@@ -450,7 +452,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#fdfbf0] via-[#fefccf] to-[#f5efd5] z-0"></div>
         <div className="absolute inset-0 mandala-overlay opacity-[0.05] z-0"></div>
         <div className="absolute inset-0 z-0 opacity-[0.15] blur-md pointer-events-none scale-105">
-          <img alt="Blurred Venue" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtfW5iQWueaJXMzmgHM7A2_dLIANZCKYBLoelu-xWOzTPBh9XvUrtompuWQDB7r7dI1MO2lXLwTP_NbRJBJA4lc1Qmx0YoxfrZ4fP153kOdM7sbdk3ofpCb48PLvF-46BCqQPw4l7EG7NXyA721tRgIVv7Lzw7DxmBgZBGjeUDMq8MAKXRQWFO2hnolpfVg6PV4BkeiT-X-WiikVeq4-f1SZwhYQnlN8h_tdyCDvCGpTFT70s11JGPDbJ_41VFOjdHDof1PZqU3TaB"/>
+          <img alt="Blurred Venue" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtfW5iQWueaJXMzmgHM7A2_dLIANZCKYBLoelu-xWOzTPBh9XvUrtompuWQDB7r7dI1MO2lXLwTP_NbRJBJA4lc1Qmx0YoxfrZ4fP153kOdM7sbdk3ofpCb48PLvF-46BCqQPw4l7EG7NXyA721tRgIVv7Lzw7DxmBgZBGjeUDMq8MAKXRQWFO2hnolpfVg6PV4BkeiT-X-WiikVeq4-f1SZwhYQnlN8h_tdyCDvCGpTFT70s11JGPDbJ_41VFOjdHDof1PZqU3TaB" loading="lazy" decoding="async"/>
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 lg:px-6">
           <div className="text-center mb-8 lg:mb-16 max-w-4xl mx-auto">
@@ -712,7 +714,7 @@ export default function Home() {
           <span className="material-symbols-outlined text-7xl lg:text-9xl text-brand-maroon">format_quote</span>
         </div>
         <div className="max-w-4xl mx-auto px-4 lg:px-6 text-center">
-          <img alt="Portrait of a happy client couple" className="w-20 h-20 lg:w-24 lg:h-24 rounded-full mx-auto mb-6 lg:mb-8 object-cover border-4 border-white shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcIiUOVPEHfVOgOVy16pFrNzNc-rqMh29OrQIhVVGFcShe3okVNMrh3ILBAIrauVH7TrAJhTuMi8uF6IRxeE7ddEAFaTC12Qpm9AG7ykVTGpETEmat4JibKS94kGWN4CpjR9SiMWNuvAC94KqLHuZSt5oOK2keDStKegRqI6Dmpe3pyR9NU02srugwEyR9i55FEMDSsqn2WX6fy8IxRJfy3Mf2HMskNMvMHNdCj_pnIAG7CUPDqdJfaKa8QpNEQ-hVadBI17iv_x7t"/>
+          <img alt="Portrait of a happy client couple" className="w-20 h-20 lg:w-24 lg:h-24 rounded-full mx-auto mb-6 lg:mb-8 object-cover border-4 border-white shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcIiUOVPEHfVOgOVy16pFrNzNc-rqMh29OrQIhVVGFcShe3okVNMrh3ILBAIrauVH7TrAJhTuMi8uF6IRxeE7ddEAFaTC12Qpm9AG7ykVTGpETEmat4JibKS94kGWN4CpjR9SiMWNuvAC94KqLHuZSt5oOK2keDStKegRqI6Dmpe3pyR9NU02srugwEyR9i55FEMDSsqn2WX6fy8IxRJfy3Mf2HMskNMvMHNdCj_pnIAG7CUPDqdJfaKa8QpNEQ-hVadBI17iv_x7t" loading="lazy" decoding="async"/>
           <p className="font-headline text-xl lg:text-3xl italic text-primary leading-relaxed mb-6 lg:mb-8">
             "The Heirloom Editorial transformed our ancestral home into a dreamscape we couldn't have imagined. Every corner told a story of our heritage with modern elegance."
           </p>
@@ -731,7 +733,7 @@ export default function Home() {
           <img alt="Decorative floral detail" className="w-full h-full object-cover rounded-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFvg53eVoiJvUDX9lwrsO8SYo8cWx9H4lpUYADd-UN5b6IJn7ERs9maVkKbeEf4GEjXqYs2GNJhMwLOwnmEibRnWxYWaa2SI2C9roAu3QAaYlHqc6xfcd1eYA2DqHOF_6-iWDGKPokblOkqUZ1tDLCXeH_ZjsFQV3kdnrlMbCrU5Dvvs53BvmLYr4sYB-m-JFiZz7AuJJElhjNBNlKzVAxdVJwCYnIeYTNfPtNmFqCdPkOZY70Sn8YogiMgjhVBXZHZY-dI0DkJDXA"/>
         </div>
         <div className="absolute -right-20 bottom-20 w-64 h-80 -rotate-12 opacity-40 hidden lg:block">
-          <img alt="Elegant wedding table setting" className="w-full h-full object-cover rounded-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-DlK5Whm3TH37zyGxvXHItg0yEUrYAtOreZzpVbgVKGus3IF3HeQXU9PK4Aa2vFmcGid4W5O3B9tX6Q8hrpzkPIjvg_vMfxDksJtFj1A7TWWG2SpHTrOhvjLuyIyJFyIgW44vJhBb4tsEN3IjspoGQlaif9GPYLisqQhIiYS6HZU7rVw923VIx3qosJZB4SmfKLAphRZq3u4cHyO4qEJ2FlpYm2dHNqOEn5RkWY3s3ydEGR4iMOyMe4cHXJo2H3RV664bcakOeIkW"/>
+          <img alt="Elegant wedding table setting" className="w-full h-full object-cover rounded-xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-DlK5Whm3TH37zyGxvXHItg0yEUrYAtOreZzpVbgVKGus3IF3HeQXU9PK4Aa2vFmcGid4W5O3B9tX6Q8hrpzkPIjvg_vMfxDksJtFj1A7TWWG2SpHTrOhvjLuyIyJFyIgW44vJhBb4tsEN3IjspoGQlaif9GPYLisqQhIiYS6HZU7rVw923VIx3qosJZB4SmfKLAphRZq3u4cHyO4qEJ2FlpYm2dHNqOEn5RkWY3s3ydEGR4iMOyMe4cHXJo2H3RV664bcakOeIkW" loading="lazy" decoding="async"/>
         </div>
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <h2 className="font-headline text-2xl lg:text-7xl text-primary mb-6 lg:mb-8 tracking-tight">Ready to Create Magic?</h2>
