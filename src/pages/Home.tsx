@@ -209,7 +209,7 @@ export default function Home() {
                   </motion.div>
 
                   <h1 className="font-serif italic text-brand-gold leading-[0.6] md:leading-[0.65] tracking-tight font-extrabold md:font-bold text-center md:text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-3xl md:text-4xl lg:text-5xl text-white mb-0 md:mb-0">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-3xl md:text-5xl lg:text-6xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)] mb-0 md:mb-0">
                       Apne Sapno Ki
                     </motion.div>
                     
@@ -217,7 +217,7 @@ export default function Home() {
                       Shaadi
                     </motion.div>
 
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.1 } } }} className="text-3xl md:text-4xl lg:text-5xl text-white md:pl-64 mb-0 md:mb-0">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-3xl md:text-5xl lg:text-6xl text-white md:pl-12 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)] mb-0 md:mb-0">
                       Ko Humari
                     </motion.div>
 
@@ -225,7 +225,7 @@ export default function Home() {
                       Mehndi
                     </motion.div>
 
-                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.2 } } }} className="text-3xl md:text-4xl lg:text-5xl text-white md:pl-20">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: 1.5, ease: [0.22, 1, 0.36, 1] } } }} className="text-3xl md:text-5xl lg:text-6xl text-white md:pl-20 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]">
                       Se Shuru Karte Hain
                     </motion.div>
                   </h1>
