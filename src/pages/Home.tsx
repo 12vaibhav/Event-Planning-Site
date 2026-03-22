@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
-import PortfolioSection from '../components/PortfolioSection';
-import AuthModal from '../components/AuthModal';
 import { useAuth } from '../contexts/AuthContext';
 import { useVirtualPreview } from '../hooks/useVirtualPreview';
+
+// Lazy load components below the fold
+const PortfolioSection = lazy(() => import('../components/PortfolioSection'));
+const AuthModal = lazy(() => import('../components/AuthModal'));
+
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SplitType from 'split-type';
@@ -16,8 +19,17 @@ export default function Home() {
   const { user } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState('Mehndi Vibes');
+  const [isMobile, setIsMobile] = useState(false);
   const themes = ['Mehndi Vibes', 'Sangeet Glow', 'Grand Wedding', 'Bride-Groom Entry', 'Birthday Fun', 'Custom'];
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
 
   const {
     previewState,
@@ -131,20 +143,21 @@ export default function Home() {
           transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0 z-0 will-change-transform"
         >
-          <img 
-            alt="Elegant wedding decorations" 
-            className="w-full h-full object-cover hidden lg:block" 
-            src="/Image Assets/hero_desktop_v2.png"
-          />
-          <img 
-            alt="Mobile hero background" 
-            className="w-full h-full object-cover lg:hidden blur-[2px]" 
-            src="/Image Assets/hero_mobile_v3.jpg"
-          />
+          <picture>
+            <source media="(min-width: 1024px)" srcSet="/Image Assets/hero_desktop_v2.png" />
+            <img 
+              alt="Elegant wedding decorations" 
+              className="hero-image" 
+              src="/Image Assets/hero_mobile_v3.jpg"
+              width="800"
+              height="1200"
+            />
+          </picture>
           <div className="hero-grain"></div>
           <div className="absolute inset-0 hero-gradient-overlay opacity-20"></div>
           {/* Dark overlay for text visibility across all devices */}
           <div className="absolute inset-0 bg-black/0 z-10"></div>
+
         </motion.div>
 
         {/* Animated Motif (Modern Editorial Detail) */}
@@ -193,11 +206,15 @@ export default function Home() {
                     hidden: { opacity: 0 },
                     visible: {
                       opacity: 1,
-                      transition: { staggerChildren: 0.2, delayChildren: 0.5 }
+                      transition: { 
+                        staggerChildren: isMobile ? 0.1 : 0.2, 
+                        delayChildren: isMobile ? 0.3 : 0.5 
+                      }
                     }
                   }}
                   className="flex flex-col gap-1 lg:gap-2 items-center md:items-start will-change-transform"
                 >
+
                   <motion.div 
                     variants={{ hidden: { opacity: 0, x: -30 }, visible: { opacity: 1, x: 0, transition: { duration: 1.2, ease: "easeOut" } } }}
                     className="flex lg:hidden items-center justify-center md:justify-start gap-3 lg:gap-4 mb-2 lg:mb-4"
@@ -241,10 +258,10 @@ export default function Home() {
                 className="space-y-6 lg:space-y-8 will-change-transform"
               >
                 <div className="space-y-3 lg:space-y-4">
-                  <p className="text-white font-serif font-bold italic text-sm lg:text-base leading-relaxed border-l-2 border-brand-gold pl-4 lg:pl-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                  <p className="text-white font-serif font-bold italic text-sm lg:text-base leading-relaxed border-b-2 lg:border-l-2 lg:border-b-0 border-brand-gold pb-3 lg:pb-0 lg:pl-6 text-center lg:text-left drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                     Crafting cinematic celebrations that honor tradition through modern editorial artistry.
                   </p>
-                  <div className="flex flex-wrap gap-2 pt-1 lg:pt-2">
+                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1 lg:pt-2">
                     {['Wedding', 'Mehndi', 'Sangeet'].map((tag) => (
                       <span key={tag} className="px-3 py-1 lg:px-4 lg:py-1.5 rounded-full border border-white/20 text-[8px] lg:text-[9px] uppercase tracking-[0.2em] text-white font-bold">
                         {tag}
@@ -388,27 +405,30 @@ export default function Home() {
             <motion.div 
               key={idx}
               variants={{
-                hidden: { 
-                  opacity: 0, 
-                  y: 50, 
-                  rotateX: -15,
-                  scale: 0.9,
-                  filter: 'blur(5px)'
-                },
-                visible: { 
-                  opacity: 1, 
-                  y: 0, 
-                  rotateX: 0,
-                  scale: 1,
-                  filter: 'blur(0px)',
-                  transition: {
-                    type: "spring",
-                    stiffness: 60,
-                    damping: 15,
-                    mass: 1.2
+                  hidden: { 
+                    opacity: 0, 
+                    y: isMobile ? 30 : 50, 
+                    rotateX: isMobile ? 0 : -15,
+                    scale: isMobile ? 1 : 0.9,
+                    filter: isMobile ? 'none' : 'blur(5px)'
+                  },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0, 
+                    rotateX: 0,
+                    scale: 1,
+                    filter: 'none',
+                    transition: {
+                      type: isMobile ? "tween" : "spring",
+                      duration: isMobile ? 0.8 : 1.2,
+                      stiffness: 60,
+                      damping: 15,
+                      mass: 1.2,
+                      ease: [0.22, 1, 0.36, 1]
+                    }
                   }
-                }
-              }}
+                }}
+
               className={`${service.bg} p-4 lg:p-8 rounded-[1.5rem] lg:rounded-[2rem] flex flex-col items-center text-center transition-all duration-500 hover:-translate-y-2 lg:hover:-translate-y-4 hover:shadow-2xl hover:shadow-brand-maroon/10 group relative overflow-hidden`}
             >
               <div className="absolute top-0 right-0 w-24 lg:w-32 h-24 lg:h-32 bg-gradient-to-br from-white/20 to-transparent rounded-bl-full translate-x-12 -translate-y-12 lg:translate-x-16 lg:-translate-y-16 group-hover:translate-x-6 lg:group-hover:translate-x-8 group-hover:-translate-y-6 lg:group-hover:-translate-y-8 transition-transform duration-700" />
@@ -429,6 +449,8 @@ export default function Home() {
                   src={service.img}
                   loading="lazy"
                   decoding="async"
+                  width="400"
+                  height="300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-maroon/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end justify-center pb-3 lg:pb-6">
                   <span className="text-white font-label text-[8px] lg:text-[10px] uppercase tracking-widest border border-white/40 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full backdrop-blur-sm">
@@ -443,16 +465,16 @@ export default function Home() {
 
       <motion.section 
         id="virtual-3d"
-        initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-        whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        viewport={{ once: true, margin: "-100px" }}
+        initial={{ opacity: 0, scale: isMobile ? 1 : 0.95, filter: isMobile ? 'none' : 'blur(10px)' }}
+        whileInView={{ opacity: 1, scale: 1, filter: 'none' }}
+        viewport={{ once: true, margin: isMobile ? "-40px" : "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="relative py-6 lg:py-12 w-full overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-[#fdfbf0] via-[#fefccf] to-[#f5efd5] z-0"></div>
         <div className="absolute inset-0 mandala-overlay opacity-[0.05] z-0"></div>
         <div className="absolute inset-0 z-0 opacity-[0.15] blur-md pointer-events-none scale-105">
-          <img alt="Blurred Venue" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtfW5iQWueaJXMzmgHM7A2_dLIANZCKYBLoelu-xWOzTPBh9XvUrtompuWQDB7r7dI1MO2lXLwTP_NbRJBJA4lc1Qmx0YoxfrZ4fP153kOdM7sbdk3ofpCb48PLvF-46BCqQPw4l7EG7NXyA721tRgIVv7Lzw7DxmBgZBGjeUDMq8MAKXRQWFO2hnolpfVg6PV4BkeiT-X-WiikVeq4-f1SZwhYQnlN8h_tdyCDvCGpTFT70s11JGPDbJ_41VFOjdHDof1PZqU3TaB" loading="lazy" decoding="async"/>
+          <img alt="Blurred Venue" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtfW5iQWueaJXMzmgHM7A2_dLIANZCKYBLoelu-xWOzTPBh9XvUrtompuWQDB7r7dI1MO2lXLwTP_NbRJBJA4lc1Qmx0YoxfrZ4fP153kOdM7sbdk3ofpCb48PLvF-46BCqQPw4l7EG7NXyA721tRgIVv7Lzw7DxmBgZBGjeUDMq8MAKXRQWFO2hnolpfVg6PV4BkeiT-X-WiikVeq4-f1SZwhYQnlN8h_tdyCDvCGpTFT70s11JGPDbJ_41VFOjdHDof1PZqU3TaB" loading="lazy" decoding="async" width="1200" height="800" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 lg:px-6">
           <div className="text-center mb-8 lg:mb-16 max-w-4xl mx-auto">
@@ -670,12 +692,14 @@ export default function Home() {
         </div>
       </motion.section>
 
-      <PortfolioSection />
+      <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="w-8 h-8 border-4 border-brand-maroon border-t-transparent rounded-full animate-spin"></div></div>}>
+        <PortfolioSection />
+      </Suspense>
 
       <motion.section 
-        initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-        whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        viewport={{ once: true, margin: "-100px" }}
+        initial={{ opacity: 0, scale: isMobile ? 1 : 0.95, filter: isMobile ? 'none' : 'blur(10px)' }}
+        whileInView={{ opacity: 1, scale: 1, filter: 'none' }}
+        viewport={{ once: true, margin: isMobile ? "-40px" : "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="pt-0 pb-4 lg:py-6 px-4 lg:px-20 bg-surface"
       >
@@ -704,9 +728,9 @@ export default function Home() {
       </motion.section>
 
       <motion.section 
-        initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-        whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        viewport={{ once: true, margin: "-100px" }}
+        initial={{ opacity: 0, scale: isMobile ? 1 : 0.95, filter: isMobile ? 'none' : 'blur(10px)' }}
+        whileInView={{ opacity: 1, scale: 1, filter: 'none' }}
+        viewport={{ once: true, margin: isMobile ? "-40px" : "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="py-4 lg:py-10 bg-surface-container-high relative overflow-hidden"
       >
@@ -714,7 +738,7 @@ export default function Home() {
           <span className="material-symbols-outlined text-7xl lg:text-9xl text-brand-maroon">format_quote</span>
         </div>
         <div className="max-w-4xl mx-auto px-4 lg:px-6 text-center">
-          <img alt="Portrait of a happy client couple" className="w-20 h-20 lg:w-24 lg:h-24 rounded-full mx-auto mb-6 lg:mb-8 object-cover border-4 border-white shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcIiUOVPEHfVOgOVy16pFrNzNc-rqMh29OrQIhVVGFcShe3okVNMrh3ILBAIrauVH7TrAJhTuMi8uF6IRxeE7ddEAFaTC12Qpm9AG7ykVTGpETEmat4JibKS94kGWN4CpjR9SiMWNuvAC94KqLHuZSt5oOK2keDStKegRqI6Dmpe3pyR9NU02srugwEyR9i55FEMDSsqn2WX6fy8IxRJfy3Mf2HMskNMvMHNdCj_pnIAG7CUPDqdJfaKa8QpNEQ-hVadBI17iv_x7t" loading="lazy" decoding="async"/>
+          <img alt="Portrait of a happy client couple" className="w-20 h-20 lg:w-24 lg:h-24 rounded-full mx-auto mb-6 lg:mb-8 object-cover border-4 border-white shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcIiUOVPEHfVOgOVy16pFrNzNc-rqMh29OrQIhVVGFcShe3okVNMrh3ILBAIrauVH7TrAJhTuMi8uF6IRxeE7ddEAFaTC12Qpm9AG7ykVTGpETEmat4JibKS94kGWN4CpjR9SiMWNuvAC94KqLHuZSt5oOK2keDStKegRqI6Dmpe3pyR9NU02srugwEyR9i55FEMDSsqn2WX6fy8IxRJfy3Mf2HMskNMvMHNdCj_pnIAG7CUPDqdJfaKa8QpNEQ-hVadBI17iv_x7t" loading="lazy" decoding="async" width="96" height="96" />
           <p className="font-headline text-xl lg:text-3xl italic text-primary leading-relaxed mb-6 lg:mb-8">
             "The Heirloom Editorial transformed our ancestral home into a dreamscape we couldn't have imagined. Every corner told a story of our heritage with modern elegance."
           </p>
@@ -723,9 +747,9 @@ export default function Home() {
       </motion.section>
 
       <motion.section 
-        initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-        whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-        viewport={{ once: true, margin: "-100px" }}
+        initial={{ opacity: 0, scale: isMobile ? 1 : 0.95, filter: isMobile ? 'none' : 'blur(10px)' }}
+        whileInView={{ opacity: 1, scale: 1, filter: 'none' }}
+        viewport={{ once: true, margin: isMobile ? "-40px" : "-100px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="py-4 lg:py-12 px-4 lg:px-20 bg-surface relative overflow-hidden"
       >
@@ -752,11 +776,13 @@ export default function Home() {
       </motion.section>
 
       {/* Auth Modal */}
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        redirectMessage="Sign in to generate your free virtual decoration preview!"
-      />
+      <Suspense fallback={null}>
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          redirectMessage="Sign in to generate your free virtual decoration preview!"
+        />
+      </Suspense>
     </>
   );
 }

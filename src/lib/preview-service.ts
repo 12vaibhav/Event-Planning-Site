@@ -12,10 +12,8 @@ import { getSession } from './auth';
 import { validateImageFile } from './validation';
 import type { PreviewTheme, PreviewStatus } from '../types/database.types';
 
-// Declare Puter globally
-declare global {
-  interface Window { puter: any; }
-}
+// Puter globally no longer needed
+
 
 export interface PreviewGenerationResult {
   success: boolean;
@@ -90,30 +88,8 @@ function fileToBase64Clean(file: File): Promise<string> {
   });
 }
 
-// Ensure Puter API is completely initialized and user is signed into a new valid account
-async function ensurePuterReady() {
-  let attempts = 0;
-  while ((!window.puter || !window.puter.ai) && attempts < 20) {
-    console.log(`Waiting for Puter AI library to initialize... (${attempts}/20)`);
-    await new Promise(r => setTimeout(r, 500));
-    attempts++;
-  }
+// ensurePuterReady no longer needed
 
-  if (!window.puter || !window.puter.ai) {
-    throw new Error('Puter AI library could not be loaded. Please turn off Ad-blockers or completely refresh the page.');
-  }
-
-  // If the user wants a completely fresh new account, they can invoke sign in explicitly
-  const isSignedIn = window.puter.auth ? await window.puter.auth.isSignedIn() : false;
-  if (!isSignedIn && window.puter.auth) {
-      console.log('Prompting Puter Sign In for new account access...');
-      try {
-          await window.puter.auth.signIn();
-      } catch (e) {
-          console.warn("User dismissed sign in, attempting anonymous Puter access.");
-      }
-  }
-}
 
 export async function generatePreview(
   file: File,

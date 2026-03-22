@@ -117,11 +117,11 @@ export default function PortfolioSection() {
               return (
                 <motion.div 
                   key={item.class} 
-                  initial={{ x: index % 2 === 0 ? -50 : 50, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className={`group relative ${isLarge ? 'col-span-2' : 'col-span-1'} ${index === 0 ? '-mt-4' : ''}`}
+                  initial={{ y: 20, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true, margin: "-30px" }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className={`group relative overflow-hidden will-change-transform ${isLarge ? 'col-span-2' : 'col-span-1'} ${index === 0 ? '-mt-4' : ''}`}
                 >
                   <a href="#" className="block overflow-hidden rounded-2xl shadow-sm">
                     <div className={`overflow-hidden ${isLarge ? 'aspect-[16/9]' : 'aspect-[4/5]'}`}>
