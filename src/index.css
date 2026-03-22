@@ -104,7 +104,7 @@
 }
 @media (max-width: 767px) {
   .gold-glow {
-    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.8)) !important;
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8)) !important;
   }
 }
 .masonry-grid {
