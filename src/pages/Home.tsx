@@ -138,9 +138,9 @@ export default function Home() {
       <header className="relative lg:min-h-[100svh] lg:h-[100dvh] w-full flex flex-col items-stretch lg:items-center justify-start lg:justify-center overflow-hidden bg-background pt-20 lg:pt-0">
         {/* Background Layer (Animated) */}
         <motion.div 
-          initial={{ scale: 1.15, opacity: 0 }}
+          initial={{ scale: isMobile ? 1.03 : 1.15, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: isMobile ? 1.2 : 2.5, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0 z-0 will-change-transform"
         >
           <img 
