@@ -153,7 +153,7 @@ export default function Home() {
           <img 
             alt="Mobile hero background" 
             className="hero-image lg:hidden" 
-            src="/Image Assets/hero_mobile_v3.jpg"
+            src="/Image Assets/hero_mobile.webp"
             width="800"
             height="1200"
           />
