@@ -71,15 +71,16 @@ export default function Navbar() {
       <header className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between lg:hidden bg-background/80 backdrop-blur-md border-b border-brand-gold/20">
         <button 
           onClick={() => setIsMenuOpen(true)}
-          className="w-10 h-10 flex items-center justify-center text-primary hover:text-brand-gold transition-colors"
+          className="w-10 h-10 flex items-center justify-center text-primary hover:text-brand-gold transition-colors z-10"
         >
           <span className="material-symbols-outlined">menu</span>
         </button>
-        <Link to="/" className="flex items-center gap-2">
-          <img src="/logo_n.png" alt="Heirloom Logo" className="h-10 w-auto object-contain" />
-          <span className="font-serif text-lg tracking-[0.3em] text-primary italic font-bold">HEIRLOOM</span>
-        </Link>
-        <div className="flex items-center gap-1">
+        <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
+          <Link to="/" className="pointer-events-auto">
+            <img src="/logo_n.png" alt="Heirloom Logo" className="h-10 w-auto object-contain" />
+          </Link>
+        </div>
+        <div className="flex items-center gap-1 z-10">
           {user ? (
             <button 
               onClick={() => setIsMenuOpen(true)}
