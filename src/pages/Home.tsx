@@ -135,7 +135,7 @@ export default function Home() {
 
   return (
     <>
-      <header className="relative lg:min-h-[100svh] lg:h-[100dvh] w-full flex items-start lg:items-center justify-center lg:overflow-hidden bg-background pt-20 lg:pt-0">
+      <header className="relative lg:min-h-[100svh] lg:h-[100dvh] w-full flex flex-col items-stretch lg:items-center justify-start lg:justify-center overflow-hidden bg-background pt-20 lg:pt-0">
         {/* Background Layer (Animated) */}
         <motion.div 
           initial={{ scale: 1.15, opacity: 0 }}
@@ -198,7 +198,7 @@ export default function Home() {
         </div>
 
         {/* Main Content Container */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-6 pb-4 lg:pb-20 lg:pt-20">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-6 pb-6 lg:pb-20 lg:pt-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
             
             {/* Left Column: Headline */}
