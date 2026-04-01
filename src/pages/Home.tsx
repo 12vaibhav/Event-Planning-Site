@@ -146,7 +146,7 @@ export default function Home() {
           <img 
             alt="Elegant wedding decorations" 
             className="w-full h-full object-cover hidden lg:block" 
-            src="/Image Assets/hero_desktop_v2.png"
+            src="/Image Assets/hero_background.jpg"
             width="1920"
             height="1080"
           />
