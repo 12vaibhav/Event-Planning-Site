@@ -116,7 +116,7 @@
 
 @media (max-width: 1023px) {
   .hero-image {
-    filter: blur(2px);
+    filter: blur(0.4px);
   }
 }
 
