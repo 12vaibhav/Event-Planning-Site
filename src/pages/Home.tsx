@@ -135,7 +135,7 @@ export default function Home() {
 
   return (
     <>
-      <header className="relative min-h-[100svh] lg:h-[100dvh] w-full flex items-start lg:items-center justify-center lg:overflow-hidden bg-background pt-20 lg:pt-0">
+      <header className="relative lg:min-h-[100svh] lg:h-[100dvh] w-full flex items-start lg:items-center justify-center lg:overflow-hidden bg-background pt-20 lg:pt-0">
         {/* Background Layer (Animated) */}
         <motion.div 
           initial={{ scale: 1.15, opacity: 0 }}
