@@ -76,7 +76,7 @@ export default function Navbar() {
           <span className="material-symbols-outlined">menu</span>
         </button>
         <Link to="/" className="flex items-center gap-2">
-          <img src="/logo_n.png" alt="Heirloom Logo" className="h-6 w-auto object-contain" />
+          <img src="/logo_n.png" alt="Heirloom Logo" className="h-10 w-auto object-contain" />
           <span className="font-serif text-lg tracking-[0.3em] text-primary italic font-bold">HEIRLOOM</span>
         </Link>
         <div className="flex items-center gap-1">
@@ -216,7 +216,7 @@ export default function Navbar() {
       {/* Desktop Navbar */}
       <nav className={`${navPosition} top-0 w-full z-50 transition-all duration-300 hidden lg:flex justify-between items-center px-6 md:px-10 py-4 max-w-full mx-auto ${navBackground}`}>
         <Link to="/" className="flex items-center gap-3">
-          <img src="/logo_n.png" alt="The Heirloom Editorial Logo" className="h-8 w-auto object-contain" />
+          <img src="/logo_n.png" alt="The Heirloom Editorial Logo" className="h-12 w-auto object-contain" />
           <span className="text-2xl font-headline italic text-primary hover:text-brand-gold transition-colors">The Heirloom Editorial</span>
         </Link>
         <div className="hidden md:flex gap-10 items-center">

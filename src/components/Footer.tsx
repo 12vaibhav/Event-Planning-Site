@@ -9,10 +9,7 @@ export default function Footer() {
         <div className="hidden lg:grid lg:grid-cols-4 gap-12 lg:gap-16 mb-12 lg:mb-16">
           {/* Brand Column */}
           <div className="text-center lg:text-left space-y-6">
-            <Link to="/" className="inline-flex items-center gap-3 -mx-2">
-              <img src="/logo_n.png" alt="The Heirloom Editorial Logo" className="h-12 w-auto object-contain" />
-              <h2 className="text-3xl lg:text-4xl font-headline italic text-brand-gold">The Heirloom Editorial</h2>
-            </Link>
+            <h2 className="text-3xl lg:text-4xl font-headline italic text-brand-gold">The Heirloom Editorial</h2>
             <p className="text-white/70 font-light leading-relaxed text-sm max-w-sm mx-auto lg:mx-0">
               Crafting bespoke celebrations and timeless memories with unparalleled elegance and meticulous attention to detail.
             </p>
@@ -92,8 +89,7 @@ export default function Footer() {
 
         {/* Compact Mobile Footer (Visible only on Mobile) */}
         <div className="lg:hidden flex flex-col items-center py-4 space-y-8">
-          <div className="text-center flex flex-col items-center">
-            <img src="/logo_n.png" alt="The Heirloom Editorial Logo" className="h-12 w-auto object-contain mb-3" />
+          <div className="text-center">
             <h2 className="text-2xl font-headline italic text-brand-gold mb-2">The Heirloom Editorial</h2>
             <p className="text-white/50 font-label text-[8px] uppercase tracking-[0.3em]">Exquisite Celebrations</p>
           </div>
